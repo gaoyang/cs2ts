@@ -3,7 +3,8 @@
     <id>com.github.gaoyang.cs2ts</id>
     <name>cs2ts</name>
     <vendor>gaoyang</vendor>
-
+    <version>0.0.1</version>
+    <description>test...test...test...test...test...test...test...test...</description>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
