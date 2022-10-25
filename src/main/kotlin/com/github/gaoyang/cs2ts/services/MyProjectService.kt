@@ -6,6 +6,6 @@ import com.github.gaoyang.cs2ts.MyBundle
 class MyProjectService(project: Project) {
 
     init {
-        println("MyProjectService")
+        println("MyProjectService init")
     }
 }
