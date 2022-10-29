@@ -16,4 +16,11 @@
         <listener class="com.github.gaoyang.cs2ts.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
+
+    <actions>
+        <group id="com.github.gaoyang.cs2ts.EditorPopupMenu">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <action id="ToTypescript" class="com.github.gaoyang.cs2ts.actions.ConvertToTypescriptAction" text="To Typescript" description="Convert To Typescript"/>
+        </group>
+    </actions>
 </idea-plugin>
