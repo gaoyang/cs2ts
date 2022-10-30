@@ -18,9 +18,8 @@
     </applicationListeners>
 
     <actions>
-        <group id="com.github.gaoyang.cs2ts.EditorPopupMenu">
+        <action id="com.github.gaoyang.cs2ts.ToTypescript" class="com.github.gaoyang.cs2ts.actions.ConvertToTypescriptAction" text="To Typescript" description="Convert To Typescript">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-            <action id="ToTypescript" class="com.github.gaoyang.cs2ts.actions.ConvertToTypescriptAction" text="To Typescript" description="Convert To Typescript"/>
-        </group>
+        </action>
     </actions>
 </idea-plugin>
