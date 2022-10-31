@@ -13,10 +13,14 @@ class ConvertToTypescriptAction : DumbAwareAction() {
     override fun update(e: AnActionEvent) {
         super.update(e)
         val editor = e.getData(CommonDataKeys.EDITOR)
-        val language = editor?.getLanguage()
-        if (language != CSharpLanguage) {
+        if (editor == null || editor.getLanguage() != CSharpLanguage) {
             e.presentation.isVisible = false
+            return
         }
+        val regex = Regex(".*class\\s+.*", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
+        val text = editor.document.text
+        if (!regex.matches(text))
+            e.presentation.isEnabled = false
     }
 
     override fun actionPerformed(e: AnActionEvent) {
