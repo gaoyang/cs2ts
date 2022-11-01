@@ -5,8 +5,10 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.ui.Messages
+import com.intellij.psi.util.childrenOfType
 import com.jetbrains.rdclient.util.idea.getLanguage
 import com.jetbrains.rider.ideaInterop.fileTypes.csharp.CSharpLanguage
+import com.jetbrains.rider.ideaInterop.fileTypes.csharp.psi.impl.CSharpDummyDeclaration
 
 class ConvertToTypescriptAction : DumbAwareAction() {
 
@@ -17,14 +19,14 @@ class ConvertToTypescriptAction : DumbAwareAction() {
             e.presentation.isVisible = false
             return
         }
-        val regex = Regex(".*class\\s+.*", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
-        val text = editor.document.text
-        if (!regex.matches(text))
-            e.presentation.isEnabled = false
+        val psiFile = e.getData(CommonDataKeys.PSI_FILE)
+        e.presentation.isEnabled = psiFile != null && psiFile.childrenOfType<CSharpDummyDeclaration>().any()
     }
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.getData(PlatformDataKeys.PROJECT)
-        Messages.showMessageDialog(project, "Hello from Test!", "TestTitle", Messages.getInformationIcon())
+        val editor = e.getData(PlatformDataKeys.EDITOR)
+        val psiFile = e.getData(CommonDataKeys.PSI_FILE) ?: return
+        var classList = psiFile.childrenOfType<CSharpDummyDeclaration>()
     }
 }
