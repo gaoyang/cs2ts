@@ -34,7 +34,11 @@ class ConvertToTypescriptAction : DumbAwareAction() {
         val classList = psiFile.childrenOfType<CSharpDummyDeclaration>()
         var fileEditor = FileEditorManager.getInstance(project) as FileEditorManagerImpl
         val language = Language.findLanguageByID("TypeScript") ?: return
-        var targetPsiFile = PsiFileFactory.getInstance(project).createFileFromText(language, "interface Dog {}")
+        var text = StringBuilder()
+        for (classItem in classList) {
+            text.append("interface ${classItem.declaredName} {}")
+        }
+        var targetPsiFile = PsiFileFactory.getInstance(project).createFileFromText(language, text)
         var targetFile = LightVirtualFile()
         targetFile.setContent(null, targetPsiFile.text, true)
         fileEditor.windows.first().split(myOrientation, true, targetFile, true)
