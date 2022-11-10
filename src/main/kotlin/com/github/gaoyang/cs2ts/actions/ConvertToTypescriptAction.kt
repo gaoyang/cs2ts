@@ -7,11 +7,12 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.impl.FileEditorManagerImpl
 import com.intellij.openapi.project.DumbAwareAction
-import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.util.childrenOfType
 import com.intellij.testFramework.LightVirtualFile
 import com.jetbrains.rdclient.util.idea.getLanguage
 import com.jetbrains.rider.ideaInterop.fileTypes.csharp.CSharpLanguage
+import com.jetbrains.rider.ideaInterop.fileTypes.csharp.psi.CSharpDummyBlock
+import com.jetbrains.rider.ideaInterop.fileTypes.csharp.psi.CSharpDummyNode
 import com.jetbrains.rider.ideaInterop.fileTypes.csharp.psi.impl.CSharpDummyDeclaration
 
 class ConvertToTypescriptAction : DumbAwareAction() {
@@ -35,12 +36,23 @@ class ConvertToTypescriptAction : DumbAwareAction() {
         var fileEditor = FileEditorManager.getInstance(project) as FileEditorManagerImpl
         val language = Language.findLanguageByID("TypeScript") ?: return
         var text = StringBuilder()
+
         for (classItem in classList) {
-            text.append("interface ${classItem.declaredName} {}")
+            var classText = StringBuilder()
+            classText.appendLine("interface ${classItem.declaredName}")
+            classText.appendLine('{')
+            var propList = classItem.childrenOfType<CSharpDummyBlock>().first()!!.childrenOfType<CSharpDummyNode>()
+            for (propItem in propList) {
+//                classText.appendLine("\t${propItem}")
+            }
+
+            classText.appendLine('}')
+            text.appendLine(classText)
         }
-        var targetPsiFile = PsiFileFactory.getInstance(project).createFileFromText(language, text)
+
         var targetFile = LightVirtualFile()
-        targetFile.setContent(null, targetPsiFile.text, true)
+        targetFile.setContent(null, text, true)
+        targetFile.language = language
         fileEditor.windows.first().split(myOrientation, true, targetFile, true)
     }
 }
